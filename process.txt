@@ -1,0 +1,13 @@
+----------Day1-----------------------------------
+    Create a repository 
+    Initialize the repository
+    node_modules, packahe.json, package-lock.json
+    install express
+    create a server
+    listen to port xxxx
+    write request handlers for /test , /hello
+    install nodemon and update scripts inside package.json
+    What are dependencies
+    what is the use of '-g' while npm install
+    difference between caret and tilde (^ vs ~)
+----------Day2-----------------------------------

@@ -1,0 +1,30 @@
+{
+  "name": "devtinder-backend",
+  "version": "1.0.0",
+  "description": "tinder for developers",
+  "keywords": [
+    "nodejs",
+    "javascript",
+    "backend"
+  ],
+  "homepage": "https://github.com/mohankumar-markuli/devTinder-Backend#readme",
+  "bugs": {
+    "url": "https://github.com/mohankumar-markuli/devTinder-Backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohankumar-markuli/devTinder-Backend.git"
+  },
+  "license": "ISC",
+  "author": "Mohankumar",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
