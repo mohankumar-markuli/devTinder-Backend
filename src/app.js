@@ -1,24 +1,38 @@
 const express = require("express");
-const {  userAuth } = require("./middlewares/auth.js");
-
 // creating a express instance
 const app = express();
+const connectDb = require("./config/database");
+const User = require("./models/user");
+
 const port = 3000;
 
-app.get('/users', userAuth, (req, res) => {
-    console.log(req.url);
-    res.send({ "firstName": "Mohankumar", "lastName": "Markuli" });
-});
 
-// error handling always keep at the end
-app.use("/",(err, req, res, next) =>{
-    if (err){
-        res.status(500).send("Some Error Occured - contact support team");
+app.post("/signup", async (req, res) => {
+    const user = new User({
+        firstName: "abc",
+        lastName: "xyz",
+        email: "abcxyz@gmail.com",
+        password: "abcxyz@123"
+    });
+    try {
+        await user.save();
+        res.send("User added sussessfully");
+    } catch(err){
+        res.status(400).send("Error saving the user" + err.message);
     }
 });
 
-app.listen(port, () => {
-    console.log("Server is successfully up and running");
-});
+connectDb()
+    .then(() => {
+        console.log("Database connection established...");
+        app.listen(port, () => {
+            console.log("Server is successfully up and running");
+        });
+    })
+    .catch(err => {
+        console.log("Cannot establish database connection");
+    }
+    );
+
 
 console.log("app.js is running");
