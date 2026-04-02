@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
+// require("dotenv").config();
+
+const uri = "mongodb+srv://mohankumarmarkuli_db_user:H3mYMhJOQHqOsv6F@namastenode.voiccvs.mongodb.net/devTinder";
+
 // connect to a clusetr
-
-require("dotenv").config();
-const url = process.env.MONGODB_URI;
-
 const connectDb = async () => {
-    await mongoose.connect(url);
+    await mongoose.connect(uri);
 };
 
 module.exports = connectDb;
