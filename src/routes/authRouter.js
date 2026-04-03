@@ -47,7 +47,7 @@ authRouter.post("/login", async (req, res) => {
         // compare pwd with the hash pwd in DB 
         // const isPasswordValid = await bcrypt.compare(password, user.password);
         const isPasswordValid = await user.validatePassword(password);
-        
+
         if (isPasswordValid) {
             const token = await user.getJWT();
 
@@ -64,5 +64,11 @@ authRouter.post("/login", async (req, res) => {
     }
 });
 
+authRouter.post("/logout", async(req,res) =>{
+    res.cookie("token", null, {
+        expires: new Date(Date.now()),
+    });
+    res.send("Logout Successful");
+});
 
 module.exports = authRouter;

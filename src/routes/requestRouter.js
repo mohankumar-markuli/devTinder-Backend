@@ -1,6 +1,6 @@
 const express = require("express");
 const requestRouter  = express.Router();
-const {userAuth} = require("../middlewares/auth");
+const {userAuth} = require("../middlewares/userAuth");
 
 requestRouter.post("", userAuth, async (req,res)=>{
 
