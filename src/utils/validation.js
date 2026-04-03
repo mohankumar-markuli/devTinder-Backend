@@ -28,12 +28,28 @@ const validateEditProfileData = (req) => {
     const isEditAllowed = Object.keys(req.body).every((field) =>
         allowedEditFields.includes(field)
     );
-    console.log(isEditAllowed);
 
     return isEditAllowed;
 }
 
+const validateChangePassword = async (req) => {
+    const { password, newPassword } = req.body;
+
+    const isOldPasswordValid = await req.user.validatePassword(password);
+    if (!isOldPasswordValid) {
+        throw new Error("Enter your old password again");
+    }
+
+    const isNewPasswordSame = await req.user.validatePassword(newPassword);
+    if (isNewPasswordSame) {
+        throw new Error("your new password cant be same as old password");
+    }
+
+    return !isNewPasswordSame;
+}
+
 module.exports = {
     validateSignUpData,
-    validateEditProfileData
+    validateEditProfileData,
+    validateChangePassword
 };
