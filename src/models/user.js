@@ -73,7 +73,7 @@ userSchema.methods.getJWT = async function () {
         expiresIn: "7d",
     });
     return token;
-}
+};
 
 userSchema.methods.validatePassword = async function(passwordInputByUser) {
     const user = this;
@@ -84,6 +84,6 @@ userSchema.methods.validatePassword = async function(passwordInputByUser) {
         passwordHash
     );
     return isPasswordValid;
-}
+};
 
 module.exports = mongoose.model("User", userSchema);
