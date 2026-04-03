@@ -3,22 +3,105 @@ const express = require("express");
 const app = express();
 
 const connectDb = require("./config/database");
+const { validateSignUpData } = require("./utils/validation");
+const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+
 const User = require("./models/user");
 
 const port = 3000;
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.post("/signup", async (req, res) => {
-    const user = new User(req.body);
     try {
+        //validation of data
+        validateSignUpData(req);
+
+        //encrypt the password
+        const { firstName, lastName, emailId, password } = req.body;
+        const saltRound = 10;
+        const passwordHash = await bcrypt.hash(password, saltRound);
+        console.log(passwordHash)
+
+        //create new instance
+        const user = new User({
+            firstName,
+            lastName,
+            emailId,
+            password: passwordHash,
+        });
+
         await user.save();
         console.log("Data saved to DB");
         res.send("User added sussessfully");
+
     } catch (err) {
-        res.status(400).send("Error saving the user " + err.message);
+        res.status(400).send("Validation Error " + err.message);
     }
 });
+
+app.post("/login", async (req, res) => {
+    try {
+        const { emailId, password } = req.body;
+
+        const user = await User.findOne({ emailId: emailId });
+
+        // if user not found
+        if (!user) {
+            throw new Error("Invalid credentials : Please SignUp")
+        }
+
+        // compare pwd with the hash pwd in DB 
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+
+        if (isPasswordValid) {
+
+            // create a JWT token
+            const token = await jwt.sign({ _id: user._id }, "DEV@Tinder123");
+            console.log("Token: ", token);
+
+            // Add the token to cookie and send the response back to the user
+            res.cookie("token", token);
+
+            res.send("password valid : Login Successful")
+        }
+        else {
+            throw new Error("Invalid credentials");
+        }
+
+    } catch (err) {
+        res.status(400).send("Error Occured with Login : " + err.message);
+    }
+});
+
+app.get("/profile", async (req, res) => {
+
+    try {
+        const cookies = req.cookies;
+        console.log(cookies);
+
+        const { token } = cookies;
+        // validate my token
+
+        const decodedTokenMessage = await jwt.verify(token, "DEV@Tinder123");
+        console.log(decodedTokenMessage)
+
+        const {_id} = decodedTokenMessage;
+
+        const user = await User.findById(_id);
+        if(!user){
+            throw new Error("User not found");
+        }
+        res.send(user);
+
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+});
+
 
 app.get("/user", async (req, res) => {
     const userEmail = req.body.emailId;
@@ -60,18 +143,18 @@ app.patch("/user/:userID", async (req, res) => {
     try {
         // API level validation
         const ALLOWED_UPDATES = [
-            "photoUrl", "about","gender","age","skills"
+            "photoUrl", "about", "gender", "age", "skills"
         ];
 
         const isUpdateAllowed = Object.keys(data).every((k) =>
             ALLOWED_UPDATES.includes(k)
         );
 
-        if(!isUpdateAllowed){
+        if (!isUpdateAllowed) {
             throw new Error("Update not allowed");
         }
 
-        if(data?.skills.length>10){
+        if (data?.skills.length > 10) {
             throw new Error("Skills cannot be more then 10");
         }
 
