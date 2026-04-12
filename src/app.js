@@ -21,7 +21,7 @@ connectDb()
     .then(() => {
         console.log("Database connection established...");
         app.listen(port, () => {
-            console.log("Server is successfully up and running");
+            console.log("Server is up and running...");
         });
     })
     .catch(err => {
@@ -29,4 +29,4 @@ connectDb()
     }
     );
 
-console.log("app.js is running");
+console.log("Starting my Server dependencies...");
