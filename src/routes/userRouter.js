@@ -34,25 +34,35 @@ userRouter.get('/user/connections', userAuth,
             const loggedInUser = req.user;
 
             const connectionRequest = await ConnectionRequest.find({
-                $or:[
-                    {toUserId: loggedInUser, status:"accepted"},
-                    {fromUserId: loggedInUser, status:"accepted"}
+                $or: [
+                    { toUserId: loggedInUser, status: "accepted" },
+                    { fromUserId: loggedInUser, status: "accepted" }
                 ],
             }).populate("fromUserId", "firstName lastName photoUrl age skills")
-            .populate("toUserId", "firstName lastName photoUrl age skills");
+                .populate("toUserId", "firstName lastName photoUrl age skills");
 
             const data = connectionRequest.map((row) => {
 
-                if(row.fromUserId.toString() == loggedInUser._id.toString()){
+                if (row.fromUserId.toString() == loggedInUser._id.toString()) {
                     return row.toUserId;
                 }
                 return row.fromUserId;
 
             });
 
-            res.json({meaage:"Data Fetched",
+            res.json({
+                meaage: "Data Fetched",
                 data: data
             })
+
+        } catch (err) {
+            res.status(400).send("ERROR : " + err.message);
+        }
+    });
+
+userRouter.get('/user/feed', userAuth,
+    async (req, res) => {
+        try {
 
         } catch (err) {
             res.status(400).send("ERROR : " + err.message);
