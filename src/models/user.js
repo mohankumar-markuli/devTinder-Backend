@@ -48,9 +48,9 @@ const userSchema = new mongoose.Schema({
         //     }
         // }
     },
-    phoroUrl: {
+    photoUrl: {
         type: String,
-        default: "https://imgs.search.brave.com/9NHdH-oVtf1aR7DtrO_L3frUwQuxfPK3PA8-8BWKi3U/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMzkv/ODQ0Lzk5Ni9zbWFs/bC9wcm9maWxlLXBo/b3RvLWlsbHVzdHJh/dGlvbi1pc29sYXRl/ZC1vbi13aGl0ZS1i/YWNrZ3JvdW5kLW1h/bGUtcGVyc29uLWRl/ZmF1bHQtcHJvZmls/ZS1ncmF5LXBob3Rv/LXBpY3R1cmUtYXZh/dGFyLW1hbi1zaWxo/b3VldHRlLXBsYWNl/aG9sZGVyLXVzZXIt/c3ltYm9sLWZyZWUt/dmVjdG9yLmpwZw",
+        default: "https://cdn-icons-png.flaticon.com/128/3683/3683214.png",
         validate(value) {
             if (!validator.isURL(value)) {
                 throw new Error("Photo URL is not valid");

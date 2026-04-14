@@ -24,8 +24,9 @@ authRouter.post('/signup', async (req, res) => {
         });
 
         await user.save();
-        console.log("Data saved to DB");
-        res.send("User added sussessfully");
+        console.log("Data saved to DB ");
+        console.log(`${emailId} added successfully`)
+        res.send(`User  ${firstName} added successfully`);
 
     } catch (err) {
         res.status(400).send("Validation Error " + err.message);
@@ -52,7 +53,8 @@ authRouter.post("/login", async (req, res) => {
 
             // Add the token to cookie and send the response back to the user
             res.cookie("token", token);
-            res.send("password valid : Login Successful")
+            console.log(`user : ${emailId} Login successful`);
+            res.send("password valid : Login Successful");
         }
         else {
             throw new Error("Invalid credentials");
