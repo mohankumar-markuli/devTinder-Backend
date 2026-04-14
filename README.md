@@ -13,8 +13,15 @@
 ## ConnectRequestRouter
     POST /request/send/intrested/:userId
     POST /request/send/ignore/:userId
+
+    insted use dynamic API
+    POST /request/send/:status/:userId
+
     POST /request/review/accepted/:requestId
     POST /request/review/rejected/:requestId
+
+    insted use dynamic API
+    POST /request/review/:status/:userId
 
 ## userRouter
     GET /user/connections
