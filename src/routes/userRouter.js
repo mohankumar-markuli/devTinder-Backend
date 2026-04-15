@@ -77,20 +77,21 @@ userRouter.get('/user/feed', userAuth,
 
             // pagination
             const page = parseInt(req.query.page) || 1;
-            const limit = parseInt(req.query.limit) || 10;
-            const skip = (page-1)*limit;
+            let limit = parseInt(req.query.limit) || 10;
+            limit = limit > 50 ? 50 : limit;
+            const skip = (page - 1) * limit;
 
             // find all the connection request (send + received)
             const connectionRequest = await ConnectionRequest.find({
-                $or:[
-                    {fromUserId: loggedInUser._id},
-                    { toUserId: loggedInUser._id}
+                $or: [
+                    { fromUserId: loggedInUser._id },
+                    { toUserId: loggedInUser._id }
                 ]
             }).select("fromUserId toUserId");
-            
+
             // get the user list to hide from feed
             const hideUsersFromFeed = new Set();
-            connectionRequest.forEach( req =>{
+            connectionRequest.forEach(req => {
                 hideUsersFromFeed.add(req.fromUserId.toString());
                 hideUsersFromFeed.add(req.toUserId.toString());
             });
@@ -98,12 +99,12 @@ userRouter.get('/user/feed', userAuth,
             //  fetch the users from db with filter
             const users = await User.find({
                 $and: [
-                    {_id: {$nin: Array.from(hideUsersFromFeed)},},
-                    {_id: {$ne: loggedInUser._id},},
+                    { _id: { $nin: Array.from(hideUsersFromFeed) }, },
+                    { _id: { $ne: loggedInUser._id }, },
                 ]
             }).select("firstName LastName skills about photoUrl")
-            .skip(skip)
-            .limit(limit);
+                .skip(skip)
+                .limit(limit);
 
             res.send(users);
 
