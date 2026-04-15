@@ -2,6 +2,8 @@ const express = require("express");
 const { userAuth } = require("../middlewares/userAuth");
 
 const ConnectionRequest = require("../models/connectionRequest");
+const User = require("../models/user");
+
 const userRouter = express.Router();
 
 // get the pending connection request
@@ -51,7 +53,7 @@ userRouter.get('/user/connections', userAuth,
             });
 
             res.json({
-                meaage: "Data Fetched",
+                message: "Data Fetched",
                 data: data
             })
 
@@ -63,6 +65,47 @@ userRouter.get('/user/connections', userAuth,
 userRouter.get('/user/feed', userAuth,
     async (req, res) => {
         try {
+
+            // user must see all cards expect
+            // 1. his own card
+            // 2. his connections
+            // 3. ignored people
+            // 4. already sent the connection request
+
+            const loggedInUser = req.user;
+
+
+            // pagination
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const skip = (page-1)*limit;
+
+            // find all the connection request (send + received)
+            const connectionRequest = await ConnectionRequest.find({
+                $or:[
+                    {fromUserId: loggedInUser._id},
+                    { toUserId: loggedInUser._id}
+                ]
+            }).select("fromUserId toUserId");
+            
+            // get the user list to hide from feed
+            const hideUsersFromFeed = new Set();
+            connectionRequest.forEach( req =>{
+                hideUsersFromFeed.add(req.fromUserId.toString());
+                hideUsersFromFeed.add(req.toUserId.toString());
+            });
+
+            //  fetch the users from db with filter
+            const users = await User.find({
+                $and: [
+                    {_id: {$nin: Array.from(hideUsersFromFeed)},},
+                    {_id: {$ne: loggedInUser._id},},
+                ]
+            }).select("firstName LastName skills about photoUrl")
+            .skip(skip)
+            .limit(limit);
+
+            res.send(users);
 
         } catch (err) {
             res.status(400).send("ERROR : " + err.message);
