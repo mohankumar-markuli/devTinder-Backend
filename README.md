@@ -26,6 +26,6 @@
 ## userRouter
     GET /user/connections
     GET /user/request/received
-    GET /user/feed - Gets the 
+    GET /user/feed 
 
 Status - ignore, intrested, accepted, rejected
