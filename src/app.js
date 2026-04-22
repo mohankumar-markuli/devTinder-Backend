@@ -6,10 +6,10 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const dns = require("dns");
 
-dns.setServers(["8.8.8.8","1.1.1.1"]);
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin: "http://localhost:5173",
     credentials: true,
 }));
 
@@ -22,10 +22,10 @@ const profileRouter = require("./routes/profileRouter");
 const requestRouter = require("./routes/requestRouter");
 const userRouter = require("./routes/userRouter");
 
-app.use("/",authRouter);
-app.use("/",profileRouter);
-app.use("/",requestRouter);
-app.use("/",userRouter);
+app.use("/", authRouter);
+app.use("/", profileRouter);
+app.use("/", requestRouter);
+app.use("/", userRouter);
 
 connectDb()
     .then(() => {
