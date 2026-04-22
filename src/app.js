@@ -3,12 +3,20 @@ const express = require("express");
 const app = express();
 const connectDb = require("./config/database");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const dns = require("dns");
 
-const port = 3000;
+dns.setServers(["8.8.8.8","1.1.1.1"]);
+
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials: true,
+}));
 
 app.use(express.json());
 app.use(cookieParser());
 
+const port = 3000;
 const authRouter = require("./routes/authRouter");
 const profileRouter = require("./routes/profileRouter");
 const requestRouter = require("./routes/requestRouter");

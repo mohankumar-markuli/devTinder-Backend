@@ -23,7 +23,7 @@ requestRouter.post("/request/send/:status/:toUserId",
                 return res.status(400).json({ message: "Self request not allowed" });
             }
 
-            const allowedStatus = ["ignored", "intrested"];
+            const allowedStatus = ["ignored", "interested"];
             if (!allowedStatus.includes(status)) {
                 return res.status(400).json({ message: "Invalid status type" });
             }
@@ -77,29 +77,29 @@ requestRouter.post("/request/review/:status/:requestId",
             if (!allowedStatus.includes(status)) {
                 return res.status(400).json({ message: "Invalid status type" });
             }
-            
+
             // validated toUser 
             // request should be intrest
             // loggedInUser == toUserId
             const connectionRequest = await ConnectionRequest.findOne({
                 _id: requestId,
                 toUserId: loggedInUser._id,
-                status: "intrested" 
+                status: "interested"
             });
-            
 
-            if(!connectionRequest){
-                return res.status(404).json({message:"Connection request not found"});
-            } 
+
+            if (!connectionRequest) {
+                return res.status(404).json({ message: "Connection request not found" });
+            }
 
             connectionRequest.status = status;
             const data = await connectionRequest.save();
 
             res.json({
-                message:"Connection request " +status+ " accepted ",
+                message: "Connection request " + status + " accepted ",
                 data
             });
-            
+
         }
         catch (err) {
             res.status(400).send("ERROR in Request " + error.message);

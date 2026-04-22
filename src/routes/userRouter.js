@@ -14,8 +14,8 @@ userRouter.get('/user/requests/received', userAuth,
 
             const connectionRequest = await ConnectionRequest.find({
                 toUserId: loggedInUser._id,
-                status: "intrested"
-            }).populate("fromUserId", "firstName lastName photoUrl age skills");
+                status: "interested"
+            }).populate("fromUserId", "firstName lastName photoUrl age skills about gender");
             // }).populate("fromUserId", ["firstName", "lastName"]);
 
             res.json({
@@ -40,8 +40,8 @@ userRouter.get('/user/connections', userAuth,
                     { toUserId: loggedInUser, status: "accepted" },
                     { fromUserId: loggedInUser, status: "accepted" }
                 ],
-            }).populate("fromUserId", "firstName lastName photoUrl age skills")
-                .populate("toUserId", "firstName lastName photoUrl age skills");
+            }).populate("fromUserId", "firstName lastName photoUrl age skills gender about")
+                .populate("toUserId", "firstName lastName photoUrl age skills gender about");
 
             const data = connectionRequest.map((row) => {
 
@@ -102,11 +102,12 @@ userRouter.get('/user/feed', userAuth,
                     { _id: { $nin: Array.from(hideUsersFromFeed) }, },
                     { _id: { $ne: loggedInUser._id }, },
                 ]
-            }).select("firstName LastName skills about photoUrl")
+            }).select("firstName lastName skills about photoUrl")
                 .skip(skip)
                 .limit(limit);
 
             res.send(users);
+
 
         } catch (err) {
             res.status(400).send("ERROR : " + err.message);

@@ -1,17 +1,20 @@
 # devTinder-Backend
 
 ## authRouter
+
     POST /signup
     POST /login
     POST /logout
 
 ## profileRouter
+
     GET /profile/views
     PATCH /profile/edit
     PATCH /profile/password
 
 ## ConnectRequestRouter
-    POST /request/send/intrested/:userId
+
+    POST /request/send/interested/:userId
     POST /request/send/ignore/:userId
 
     insted use dynamic API
@@ -24,8 +27,9 @@
     POST /request/review/:status/:userId
 
 ## userRouter
+
     GET /user/connections
     GET /user/request/received
-    GET /user/feed 
+    GET /user/feed
 
-Status - ignore, intrested, accepted, rejected
+Status - ignore, interested, accepted, rejected
