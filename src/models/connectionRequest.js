@@ -27,7 +27,13 @@ const connectionRequestSchema = new mongoose.Schema({
     }
 );
 
-connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 });
+// index to prevent duplicate connection request between same users
+// indexing will optimize the query performance
+connectionRequestSchema.index(
+    { fromUserId: 1, toUserId: 1 },
+    { unique: true }
+);
+
 
 // connectionRequestSchema.pre("save",function(next){
 //     const connectionRequest = this;

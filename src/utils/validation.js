@@ -28,12 +28,10 @@ const validateEditProfileData = (req) => {
     const isEditAllowed = Object.keys(req.body).every((field) =>
         allowedEditFields.includes(field)
     );
-
     return isEditAllowed;
 }
 
-const validateChangePassword = async (req) => {
-    const { password, newPassword } = req.body;
+const validateChangePassword = async (password, newPassword) => {
 
     const isOldPasswordValid = await req.user.validatePassword(password);
     if (!isOldPasswordValid) {
