@@ -15,7 +15,7 @@ const validateSignUpData = (req) => {
 }
 
 const validateEditProfileData = (req) => {
-    const allowedEditFields = [
+    const allowedFields = [
         "firstName",
         "lastName",
         "photoUrl",
@@ -25,12 +25,30 @@ const validateEditProfileData = (req) => {
         "skills"
     ];
 
-    const isEditAllowed = Object.keys(req.body).every((field) =>
-        allowedEditFields.includes(field)
+    const restrictedFields = ["emailId", "password"];
+
+    const keys = Object.keys(req.body);
+
+    const invalidFields = keys.filter(
+        (field) => !allowedFields.includes(field) && !restrictedFields.includes(field)
     );
 
-    return isEditAllowed;
-}
+    const forbiddenFields = keys.filter(
+        (field) => restrictedFields.includes(field)
+    );
+
+    if (forbiddenFields.length > 0) {
+        throw new Error(
+            `Cannot update restricted fields: ${forbiddenFields.join(", ")}`
+        );
+    }
+
+    if (invalidFields.length > 0) {
+        throw new Error(
+            `Invalid fields provided: ${invalidFields.join(", ")}`
+        );
+    }
+};
 
 const validateChangePassword = async (req, res) => {
 
@@ -43,7 +61,7 @@ const validateChangePassword = async (req, res) => {
 
     const isNewPasswordSame = await req.user.validatePassword(newPassword);
     if (isNewPasswordSame) {
-        throw new Error("your new password cant be same as old password");
+        throw new Error("New password cant be same as old password");
     }
 }
 

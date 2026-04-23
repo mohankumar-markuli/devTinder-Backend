@@ -38,7 +38,7 @@ async function sendRequest(req, res) {
             data: data
         });
 
-    } catch (error) {
+    } catch (err) {
         console.error(
             new Date().toISOString(),
             "ERROR:", err.message,

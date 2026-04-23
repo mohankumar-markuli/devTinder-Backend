@@ -53,7 +53,7 @@ async function userLogin(req, res) {
 
         // if user not found
         if (!user) {
-            throw new Error("Invalid credentials : Please SignUp")
+            throw new Error("New User : Please SignUp")
         }
 
         // compare pwd with the hash pwd in DB 
@@ -82,7 +82,7 @@ async function userLogin(req, res) {
             "ERROR: ", err.message,
         );
         res.status(400).json({
-            message: `Invalid credentials`,
+            message: err.message,
             error: "VALIDATION_ERROR",
         });
     }

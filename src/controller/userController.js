@@ -45,18 +45,16 @@ async function userConnections(req, res) {
             .populate("toUserId", "firstName lastName photoUrl age skills gender about");
 
         const data = connectionRequest.map((row) => {
-
-            if (row.fromUserId.toString() == loggedInUser._id.toString()) {
+            if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
                 return row.toUserId;
             }
             return row.fromUserId;
-
         });
 
         res.json({
             message: "Data fetched successfully",
             data: data,
-        })
+        });
 
     } catch (err) {
         console.error(

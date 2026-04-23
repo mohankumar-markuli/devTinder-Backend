@@ -23,9 +23,9 @@ async function viewProfile(req, res) {
 
 async function editProfile(req, res) {
     try {
-        if (!validateEditProfileData(req)) {
-            throw new Error("Editing EmailId or Password not allowed")
-        }
+
+        await validateEditProfileData(req);
+
         const loggedInUser = req.user;
 
         Object.keys(req.body).forEach((key) => {
@@ -42,7 +42,7 @@ async function editProfile(req, res) {
     } catch (err) {
         console.error(
             new Date().toISOString(),
-            "ERROR:", err
+            "ERROR:", err.message
         );
 
         res.status(400).json({
