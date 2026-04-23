@@ -28,10 +28,13 @@ const validateEditProfileData = (req) => {
     const isEditAllowed = Object.keys(req.body).every((field) =>
         allowedEditFields.includes(field)
     );
+
     return isEditAllowed;
 }
 
-const validateChangePassword = async (password, newPassword) => {
+const validateChangePassword = async (req, res) => {
+
+    const { password, newPassword } = req.body;
 
     const isOldPasswordValid = await req.user.validatePassword(password);
     if (!isOldPasswordValid) {
@@ -42,8 +45,6 @@ const validateChangePassword = async (password, newPassword) => {
     if (isNewPasswordSame) {
         throw new Error("your new password cant be same as old password");
     }
-
-    return !isNewPasswordSame;
 }
 
 module.exports = {
