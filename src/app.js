@@ -1,11 +1,13 @@
 const express = require("express");
+
 // creating a express instance
 const app = express();
 const connectDb = require("./config/database");
 const cookieParser = require("cookie-parser");
+
+// custom DNS provider then default
 const cors = require("cors");
 const dns = require("dns");
-
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 app.use(cors({
@@ -17,6 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const port = 3000;
+
 const authRouter = require("./routes/authRouter");
 const profileRouter = require("./routes/profileRouter");
 const requestRouter = require("./routes/requestRouter");

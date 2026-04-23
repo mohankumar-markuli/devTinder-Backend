@@ -1,4 +1,3 @@
 node_modules
 process.txt
-apiList.md
-uri.env
+.env
