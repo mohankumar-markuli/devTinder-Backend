@@ -5,6 +5,7 @@ const express = require("express");
 const app = express();
 const connectDb = require("./config/database");
 const cookieParser = require("cookie-parser");
+const { logger } = require('./middlewares/loggerMiddleware');
 
 const cors = require("cors");
 
@@ -17,6 +18,7 @@ app.use(cors({
     credentials: true,
 }));
 
+app.use(logger);
 app.use(express.json());
 app.use(cookieParser());
 
